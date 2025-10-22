@@ -90,7 +90,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello from soloSphere Server...");
+  res.send("Hello from soloSphere Server....");
 });
 app.listen(port, () => {
   console.log(`server is running on port ${port}`);
