@@ -39,44 +39,46 @@ async function run() {
       const result = await jobsCollection.findOne(query);
       res.send(result);
     });
-    // //save a bid data in db
-    // app.post("/bid", async (req, res) => {
-    //   const bidData = req.body;
+    //save a bid data in db
+    app.post("/bid", async (req, res) => {
+      const bidData = req.body;
 
-    //   const result = await bidsCollection.insertOne(bidData);
-    //   res.send(result);
-    // });
-    // app.post("/job", async (req, res) => {
-    //   const jobData = req.body;
-    //   const result = await jobsCollection.insertOne(jobData);
-    //   res.send(result);
-    // });
-    // //get all jobs posted by specific user
-    // app.get("/jobs/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = { "buyer.email": email };
-    //   const result = await jobsCollection.find(query).toArray();
-    //   res.send(result);
-    // });
-    // app.delete("/job/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await jobsCollection.deleteOne(query);
-    //   res.send(result);
-    // });
-    // app.put("/job/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const jobData = req.body;
-    //   const query = { _id: new ObjectId(id) };
-    //   const options = { upsert: true };
-    //   const updateDoc = {
-    //     $set: {
-    //       ...jobData,
-    //     },
-    //   };
-    //   const result = await jobsCollection.updateOne(query, updateDoc, options);
-    //   res.send(result);
-    // });
+      const result = await bidsCollection.insertOne(bidData);
+      res.send(result);
+    });
+    //save a job...
+    app.post("/job", async (req, res) => {
+      const jobData = req.body;
+      const result = await jobsCollection.insertOne(jobData);
+      res.send(result);
+    });
+    //get all jobs posted by specific user
+    app.get("/jobs/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { "buyer.email": email };
+      const result = await jobsCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.delete("/job/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await jobsCollection.deleteOne(query);
+      res.send(result);
+    });
+    //update a job in db
+    app.put("/job/:id", async (req, res) => {
+      const id = req.params.id;
+      const jobData = req.body;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          ...jobData,
+        },
+      };
+      const result = await jobsCollection.updateOne(query, updateDoc, options);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
