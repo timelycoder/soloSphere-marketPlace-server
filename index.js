@@ -24,21 +24,21 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
-    // const jobsCollection = client.db("soloSphere").collection("jobs");
-    // const bidsCollection = client.db("soloSphere").collection("bids");
+    const jobsCollection = client.db("soloSphere").collection("jobs");
+    const bidsCollection = client.db("soloSphere").collection("bids");
     //get all jobs data from db
 
-    // app.get("/jobs", async (req, res) => {
-    //   const result = await jobsCollection.find().toArray();
-    //   res.send(result);
-    // });
+    app.get("/jobs", async (req, res) => {
+      const result = await jobsCollection.find().toArray();
+      res.send(result);
+    });
 
-    // app.get("/job/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await jobsCollection.findOne(query);
-    //   res.send(result);
-    // });
+    app.get("/job/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await jobsCollection.findOne(query);
+      res.send(result);
+    });
     // //save a bid data in db
     // app.post("/bid", async (req, res) => {
     //   const bidData = req.body;
