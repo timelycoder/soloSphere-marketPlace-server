@@ -87,13 +87,24 @@ async function run() {
 
     app.get("/job/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
+      const query = { _id: new ObjectId(id) }; ////////////////
       const result = await jobsCollection.findOne(query);
       res.send(result);
     });
     //save a bid data in db
     app.post("/bid", async (req, res) => {
+      //check if it is a duplicate request from same user
       const bidData = req.body;
+      const query = {
+        email: bidData.email,
+        jobId: bidData.jobId,
+      };
+      const alreadyApplied = await bidsCollection.findOne(query);
+      if (alreadyApplied) {
+        return res
+          .status(400)
+          .send({ message: "You have already placed a bid on this job " });
+      }
 
       const result = await bidsCollection.insertOne(bidData);
       res.send(result);
@@ -119,7 +130,7 @@ async function run() {
     });
     app.delete("/job/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
+      const query = { _id: new ObjectId(id) }; ////////////////////
       const result = await jobsCollection.deleteOne(query);
       res.send(result);
     });
@@ -157,12 +168,35 @@ async function run() {
     app.patch("/bid/:id", async (req, res) => {
       const id = req.params.id;
       const status = req.body;
-      const query = { _id: new ObjectId(id) };
+      const query = { _id: new ObjectId(id) }; //////////////////
       const updateDoc = {
         $set: status,
       };
       const result = await bidsCollection.updateOne(query, updateDoc);
       res.send(result);
+    });
+    // get all jobs for pagination
+    app.get("/all-jobs", async (req, res) => {
+      const page = parseInt(req.query.page) - 1;
+      const size = parseInt(req.query.size);
+      const filter = req.query.filter;
+      console.log(page, size);
+      let query = {};
+      if (filter) query = { category: filter };
+      const result = await jobsCollection
+        .find(query)
+        .skip(page * size)
+        .limit(size)
+        .toArray();
+      res.send(result);
+    });
+    // get all jobs for Count
+    app.get("/jobs-count", async (req, res) => {
+      const filter = req.query.filter;
+      let query = {};
+      if (filter) query = { category: filter };
+      const count = await jobsCollection.countDocuments(query);
+      res.send({ count });
     });
 
     // Send a ping to confirm a successful connection
