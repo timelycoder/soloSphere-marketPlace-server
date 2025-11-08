@@ -12,7 +12,7 @@ const corsOptions = {
   origin: [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://solosphere.web.app",
+    "https://solospher.web.app",
   ],
   credentials: true,
   optionSuccessStatus: 200,
@@ -76,9 +76,9 @@ async function run() {
         .clearCookie("token", {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          // sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
           // sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
-          sameSite: "none",
+          // sameSite: "none",
           path: "/",
           maxAge: 0,
         })
