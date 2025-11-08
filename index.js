@@ -9,7 +9,11 @@ const port = process.env.PORT || 9000;
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://solosphere.web.app",
+  ],
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -72,7 +76,8 @@ async function run() {
         .clearCookie("token", {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          // sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
           maxAge: 0,
         })
         .send({ success: true });
