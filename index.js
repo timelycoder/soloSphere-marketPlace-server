@@ -77,7 +77,9 @@ async function run() {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           // sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-          sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
+          // sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax",
+          sameSite: "none",
+          path: "/",
           maxAge: 0,
         })
         .send({ success: true });
